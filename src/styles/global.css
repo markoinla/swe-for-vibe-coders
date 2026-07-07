@@ -1,0 +1,201 @@
+@import 'tailwindcss';
+
+/*
+  Design tokens live as CSS variables so they can flip with the OS colour scheme.
+  They're mapped into Tailwind's theme via `@theme inline` below, which makes every
+  utility (bg-surface, text-body, rounded-card…) resolve to these variables — so dark
+  mode "just works" with no per-element `dark:` classes.
+*/
+:root {
+  --c-surface: #fbfaf8;
+  --c-elevated: #ffffff;
+  --c-sunken: #f2f0ec;
+  --c-body: #1c1a17;
+  --c-muted: #5f5a52;
+  --c-line: #e6e2db;
+  --c-line-strong: #d3cdc3;
+
+  --c-accent: #4f46e5;
+  --c-accent-hover: #4338ca;
+  --c-accent-soft: #eef0fe;
+  --c-accent-contrast: #ffffff;
+
+  --c-success: #15803d;
+  --c-success-soft: #eafaef;
+  --c-danger: #b91c1c;
+  --c-danger-soft: #fdecec;
+  --c-warning: #b45309;
+  --c-warning-soft: #fdf3e3;
+
+  --c-code-bg: #1e1b2e;
+  --c-code-text: #e6e3f1;
+
+  --shadow-card: 0 1px 2px rgba(28, 26, 23, 0.04), 0 4px 16px rgba(28, 26, 23, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-surface: #14131a;
+    --c-elevated: #1c1b24;
+    --c-sunken: #26242f;
+    --c-body: #ecebf0;
+    --c-muted: #a29fb0;
+    --c-line: #302e3b;
+    --c-line-strong: #423f50;
+
+    --c-accent: #8b85f5;
+    --c-accent-hover: #a29cff;
+    --c-accent-soft: #23213a;
+    --c-accent-contrast: #14131a;
+
+    --c-success: #4ade80;
+    --c-success-soft: #16261c;
+    --c-danger: #f87171;
+    --c-danger-soft: #2a1717;
+    --c-warning: #fbbf24;
+    --c-warning-soft: #2a2110;
+
+    --c-code-bg: #0f0e16;
+    --c-code-text: #e6e3f1;
+
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.35);
+  }
+}
+
+@theme inline {
+  --color-surface: var(--c-surface);
+  --color-elevated: var(--c-elevated);
+  --color-sunken: var(--c-sunken);
+  --color-body: var(--c-body);
+  --color-muted: var(--c-muted);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+
+  --color-accent: var(--c-accent);
+  --color-accent-hover: var(--c-accent-hover);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-accent-contrast: var(--c-accent-contrast);
+
+  --color-success: var(--c-success);
+  --color-success-soft: var(--c-success-soft);
+  --color-danger: var(--c-danger);
+  --color-danger-soft: var(--c-danger-soft);
+  --color-warning: var(--c-warning);
+  --color-warning-soft: var(--c-warning-soft);
+
+  --color-code-bg: var(--c-code-bg);
+  --color-code-text: var(--c-code-text);
+
+  --radius-card: 12px;
+  --radius-btn: 8px;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
+
+  --shadow-card: var(--shadow-card);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--c-surface);
+    color: var(--c-body);
+    font-family: var(--font-sans);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+/*
+  Prose: styling for rendered MDX lesson bodies. This content is generated from
+  Markdown, so we can't put utility classes on it — a scoped stylesheet is the
+  idiomatic approach. Everything references the same theme tokens.
+*/
+@layer components {
+  /* Layout + button helpers reused across pages. */
+  .container {
+    @apply mx-auto w-full max-w-[720px] px-5;
+  }
+  .container-wide {
+    @apply max-w-[1080px];
+  }
+  .btn {
+    @apply inline-flex cursor-pointer items-center gap-2 rounded-btn bg-accent px-5 py-[11px] font-semibold text-accent-contrast transition-colors hover:bg-accent-hover;
+  }
+  .btn-secondary {
+    @apply border border-line-strong bg-elevated text-body hover:bg-sunken;
+  }
+
+  .prose {
+    font-size: 1.06rem;
+  }
+  .prose > * + * {
+    margin-top: 1.15em;
+  }
+  .prose h2 {
+    margin-top: 2.2em;
+    font-size: 1.6rem;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--c-line);
+  }
+  .prose h3 {
+    margin-top: 1.8em;
+    font-size: 1.25rem;
+  }
+  .prose ul, .prose ol {
+    padding-left: 1.4em;
+  }
+  .prose li + li {
+    margin-top: 0.4em;
+  }
+  .prose :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: var(--c-sunken);
+    padding: 0.15em 0.4em;
+    border-radius: 5px;
+    border: 1px solid var(--c-line);
+  }
+  .prose pre {
+    background: var(--c-code-bg) !important;
+    color: var(--c-code-text);
+    padding: 18px 20px;
+    border-radius: var(--radius-card);
+    overflow-x: auto;
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+  .prose pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: inherit;
+  }
+  .prose blockquote {
+    border-left: 3px solid var(--c-line-strong);
+    padding-left: 1em;
+    color: var(--c-muted);
+    font-style: italic;
+  }
+  .prose strong { font-weight: 700; }
+  .prose img { max-width: 100%; border-radius: var(--radius-card); }
+  .prose hr {
+    border: none;
+    border-top: 1px solid var(--c-line);
+    margin: 2.5em 0;
+  }
+  .prose a {
+    color: var(--c-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}

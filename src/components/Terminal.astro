@@ -1,0 +1,20 @@
+---
+// A styled, non-interactive terminal transcript. Pass the command as `cmd` and the
+// (optional) output as `out`. Output is a plain string prop rather than a slot so that
+// characters like { } and < > in code/diffs are treated as text, not parsed as MDX/JSX.
+interface Props {
+  cmd: string;
+  out?: string;
+  title?: string;
+}
+const { cmd, out, title = 'terminal' } = Astro.props;
+---
+<div class="my-7 overflow-hidden rounded-card border border-line-strong shadow-[var(--shadow-card)]">
+  <div class="flex items-center gap-1.5 bg-[#2a2740] px-3.5 py-[9px]">
+    <span class="inline-block h-[11px] w-[11px] rounded-full bg-[#ff5f57]"></span>
+    <span class="inline-block h-[11px] w-[11px] rounded-full bg-[#febc2e]"></span>
+    <span class="inline-block h-[11px] w-[11px] rounded-full bg-[#28c840]"></span>
+    <span class="ml-2 font-mono text-[0.78rem] text-[#b3aecb]">{title}</span>
+  </div>
+  <pre class="m-0 overflow-x-auto whitespace-pre-wrap bg-code-bg px-[18px] py-4 font-mono text-[0.9rem] leading-relaxed text-code-text"><span class="mr-2 select-none text-[#8b85f5]">$</span><span class="text-[#a5f3b0]">{cmd}</span>{out ? '\n' + out : ''}</pre>
+</div>

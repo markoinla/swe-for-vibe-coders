@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { modules } from '../data/modules';
+import { getCollection } from 'astro:content';
+
+const lessons = await getCollection('lessons', ({ data }) => data.published);
+const lessonCount = (slug: string) =>
+  lessons.filter((l) => l.data.module === slug).length;
+
+const firstModule = modules.find((m) => m.status === 'available');
+const firstLesson = firstModule
+  ? lessons
+      .filter((l) => l.data.module === firstModule.slug)
+      .sort((a, b) => a.data.order - b.data.order)[0]
+  : undefined;
+
+const pitches = [
+  { icon: '🧠', title: 'Concepts that click', body: 'Plain-language explanations with real examples — no CS-degree jargon, no gatekeeping.' },
+  { icon: '🎯', title: 'Check yourself', body: 'Quick interactive questions after each idea so you know it landed before moving on.' },
+  { icon: '🛠️', title: 'Do it for real', body: 'Each module ends with a hands-on exercise in an actual repo — the tools you already use.' },
+];
+---
+
+<BaseLayout title="SWE for Vibe Coders">
+  <!-- Hero -->
+  <section class="container container-wide py-[72px] text-center">
+    <p class="mb-4 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-accent">For people who ship with AI</p>
+    <h1 class="m-0 text-[clamp(2.4rem,6vw,3.6rem)] tracking-tight">Software engineering<br />for vibe coders.</h1>
+    <p class="mx-auto mt-[22px] max-w-[620px] text-[1.18rem] text-muted">
+      You can already build things. This is the stuff the AI never sat you down and
+      explained — version control, testing, not leaking your API keys — taught in
+      short, interactive lessons you actually do, not just read.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      {firstLesson && (
+        <a class="btn no-underline" href={`/lessons/${firstLesson.id}`}>Start with {firstModule?.title} →</a>
+      )}
+      <a class="btn btn-secondary no-underline" href="#curriculum">See the curriculum</a>
+    </div>
+  </section>
+
+  <!-- Pitch -->
+  <section class="container container-wide pb-2 pt-6">
+    <div class="grid grid-cols-3 gap-[18px] max-[720px]:grid-cols-1">
+      {pitches.map((p) => (
+        <div class="rounded-card border border-line bg-elevated p-[22px]">
+          <span class="text-[1.6rem]">{p.icon}</span>
+          <h3 class="mb-1.5 mt-3 text-[1.1rem]">{p.title}</h3>
+          <p class="m-0 text-[0.96rem] text-muted">{p.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Curriculum -->
+  <section id="curriculum" class="container container-wide pb-5 pt-16">
+    <div class="mx-auto mb-9 max-w-[620px] text-center">
+      <h2 class="m-0 text-[2rem]">The curriculum</h2>
+      <p class="mt-3 text-muted">Seven modules, built to be taken in order. Start anywhere, but version control first pays off everywhere else.</p>
+    </div>
+
+    <ol class="m-0 flex list-none flex-col gap-3.5 p-0">
+      {modules.map((mod, i) => {
+        const count = lessonCount(mod.slug);
+        const available = mod.status === 'available';
+        const Tag = available ? 'a' : 'div';
+        return (
+          <li>
+            <Tag
+              class={`group flex items-start gap-[18px] rounded-card border border-line bg-elevated px-6 py-[22px] text-body transition-all ${available ? 'no-underline hover:-translate-y-px hover:border-accent hover:shadow-[var(--shadow-card)]' : 'opacity-70'}`}
+              {...(available ? { href: `/modules/${mod.slug}` } : {})}
+            >
+              <span class="pt-1 font-mono text-[0.9rem] text-muted">{String(i + 1).padStart(2, '0')}</span>
+              <span class="text-[1.8rem] leading-none max-[720px]:hidden">{mod.emoji}</span>
+              <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-3">
+                  <h3 class="m-0 text-[1.25rem]">{mod.title}</h3>
+                  {available ? (
+                    <span class="rounded-full bg-accent-soft px-2.5 py-[3px] text-[0.72rem] font-bold uppercase tracking-wider text-accent">
+                      {count} {count === 1 ? 'lesson' : 'lessons'}
+                    </span>
+                  ) : (
+                    <span class="rounded-full bg-sunken px-2.5 py-[3px] text-[0.72rem] font-bold uppercase tracking-wider text-muted">
+                      Coming soon
+                    </span>
+                  )}
+                </div>
+                <p class="mt-1.5 font-semibold text-body">{mod.tagline}</p>
+                <p class="mt-1.5 text-[0.96rem] text-muted">{mod.description}</p>
+              </div>
+            </Tag>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+</BaseLayout>

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Page not found" description="That page doesn't exist.">
+  <section class="container container-wide py-24 text-center">
+    <p class="text-[4rem] leading-none">🤔</p>
+    <h1 class="mt-4 text-[2.4rem]">This page took a wrong turn</h1>
+    <p class="mx-auto mt-3 max-w-[480px] text-[1.15rem] text-muted">
+      The page you’re after doesn’t exist — maybe a mistyped URL, or a lesson that’s
+      moved. Let’s get you back on track.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a class="btn no-underline" href="/">Back to home</a>
+      <a class="btn btn-secondary no-underline" href="/#curriculum">Browse the curriculum</a>
+    </div>
+  </section>
+</BaseLayout>

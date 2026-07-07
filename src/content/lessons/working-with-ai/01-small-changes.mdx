@@ -1,0 +1,87 @@
+---
+title: Work in small steps
+description: Why the biggest lever in AI coding isn't the prompt — it's the size of each change.
+module: working-with-ai
+order: 1
+minutes: 9
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+import Callout from '../../../components/Callout.astro';
+import Terminal from '../../../components/Terminal.astro';
+import TryItInRepo from '../../../components/TryItInRepo.astro';
+
+You've got version control under your belt. Now let's use it to make AI coding dramatically
+less stressful. The single habit that separates smooth AI coding from the "everything is on
+fire" kind is surprisingly simple: **make small changes**.
+
+## The big-bang trap
+
+It's tempting to ask for everything at once: "Build me a login page with Google auth, a
+dashboard, and a settings screen." The AI happily generates hundreds of lines across a dozen
+files. Then something's broken — and now you're debugging a mountain of code you've never
+read, with no idea which part went wrong.
+
+<Callout type="warning" title="Why big changes hurt">
+  When a 500-line change breaks, the bug could be anywhere in those 500 lines. When a 20-line
+  change breaks, you know *exactly* where to look. Small changes shrink the haystack.
+</Callout>
+
+## The loop that works
+
+Good AI coding is a tight loop:
+
+1. **Ask for one small thing.** "Add a single email field to this form."
+2. **Check it works.** Look at it. Run it. Read the diff.
+3. **Commit.** Now that working state is locked in.
+4. **Repeat.** Move to the next small thing.
+
+Each commit is a safe checkpoint (remember the last module). If step 2 ever goes wrong, you
+`git restore` and you've lost minutes, not hours.
+
+<Terminal cmd="git commit -m 'Add email field to signup form'" out={`[main 7a3f9c1] Add email field to signup form
+ 1 file changed, 6 insertions(+)`} />
+
+<Quiz
+  question="Your AI assistant just generated a 400-line change touching 8 files, and the app is now broken. What went wrong at the process level?"
+  options={[
+    { text: "The change was too big to review or safely undo — it should have been several small steps", correct: true, explain: "Exactly. Small, committed steps would have isolated the break to a few lines." },
+    { text: "The AI model simply isn't good enough", explain: "Even a great model produces bugs. The process — one big unreviewed change — is what made it hard to recover from." },
+    { text: "You should have asked for 800 lines so it was more complete", explain: "Bigger changes make this worse, not better. The fix is smaller steps." },
+  ]}
+  client:visible
+/>
+
+## "But small feels slower"
+
+It feels slower and is actually faster, because you almost never get stuck. The person
+asking for giant changes *looks* fast right up until the 45-minute debugging spiral. Small
+steps trade a tiny bit of upfront ceremony for never losing an afternoon.
+
+<Callout type="tip" title="A rule of thumb">
+  If you can't describe the change in one sentence, it's probably too big. Break it into
+  sentences, and make each sentence its own request-and-commit.
+</Callout>
+
+<Quiz
+  question="What's the main benefit of committing after each small working change while coding with AI?"
+  options={[
+    { text: "It makes the code run faster", explain: "Commits don't affect performance — they're checkpoints in history." },
+    { text: "Every step becomes a safe checkpoint you can instantly return to", correct: true, explain: "Right — a broken next step costs you minutes because the last good state is one command away." },
+    { text: "It stops the AI from making mistakes", explain: "It doesn't prevent mistakes — it makes recovering from them trivial." },
+  ]}
+  client:visible
+/>
+
+<TryItInRepo>
+  Practice the loop on something tiny and real:
+
+  1. In a project, ask your AI tool for **one** small change — e.g. "change the page heading
+     text" or "add a single new list item."
+  2. Look at what it changed. Run the app if you can.
+  3. If it's good: `git add .` and `git commit -m "..."`.
+  4. If it's not: `git restore .` and try a clearer ask.
+
+  Do this three times in a row. That rhythm — ask, check, commit — is the core skill of this
+  whole module.
+</TryItInRepo>

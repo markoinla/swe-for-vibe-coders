@@ -1,0 +1,98 @@
+---
+title: Your first commit
+description: The three-step rhythm — change, stage, commit — that every save point follows.
+module: version-control
+order: 2
+minutes: 12
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+import Callout from '../../../components/Callout.astro';
+import Terminal from '../../../components/Terminal.astro';
+import TryItInRepo from '../../../components/TryItInRepo.astro';
+
+Now the hands-on part. Making a commit is a rhythm of three steps. Once it's in your fingers,
+you'll do it without thinking.
+
+## The three steps
+
+1. **Change** — you edit files. Git notices, but does nothing yet.
+2. **Stage** — you tell git *which* changes belong in the next snapshot (`git add`).
+3. **Commit** — you take the snapshot and label it (`git commit`).
+
+Why two steps to save (stage *then* commit)? Because sometimes you change five things but
+only want to snapshot two of them together. Staging lets you choose. For now, it's fine to
+just stage everything.
+
+<Terminal cmd="git add ." />
+
+The `.` means "everything I've changed." This stages your changes — puts them on deck for
+the next commit.
+
+<Terminal cmd={'git commit -m "Add contact form to homepage"'} out={`[main a1b2c3d] Add contact form to homepage
+ 1 file changed, 24 insertions(+)`} />
+
+That's a save point. The `-m` is the **message** — a short note to your future self about
+what this snapshot contains.
+
+## Writing a good commit message
+
+The message is you leaving a trail. Six months from now, scrolling through history, "fixed
+stuff" tells you nothing. "Fix login button not working on mobile" tells you everything.
+
+<Callout type="tip" title="A simple formula">
+  Finish the sentence: **"This commit will…"** — <em>add a contact form</em>, <em>fix the
+  broken image on the about page</em>, <em>remove the unused sidebar</em>. Short, specific,
+  present tense.
+</Callout>
+
+<Quiz
+  question="Which of these is the most useful commit message?"
+  options={[
+    { text: "update", explain: "Update what? Future-you has no idea. Too vague to be useful." },
+    { text: "asdfasdf", explain: "We've all done it at 2am. But it tells you nothing later." },
+    { text: "Fix checkout total showing wrong tax amount", correct: true, explain: "Specific and clear — you'd know exactly what this snapshot changed without opening it." },
+    { text: "Fixed a bunch of things and also some other stuff", explain: "A commit doing 'a bunch of things' is usually a sign it should have been several smaller commits." },
+  ]}
+  client:visible
+/>
+
+## Seeing your history
+
+Once you have a few commits, `git log` shows them, newest first:
+
+<Terminal cmd="git log --oneline" out={`a1b2c3d Add contact form to homepage
+9f8e7d6 Fix broken logo image
+3c2b1a0 Initial commit`} />
+
+Each line is a save point: a short **hash** (the ID, like `a1b2c3d`) and your message. That
+top hash is where you are right now.
+
+<Callout type="warning" title="Commit often, commit small">
+  Beginners tend to work for hours and make one giant commit. Do the opposite. A commit per
+  small, working change means your history reads like a story and your save points are close
+  together — so undoing never throws away much.
+</Callout>
+
+<Quiz
+  question="You've been coding for 20 minutes and the feature now works. What's the right instinct?"
+  options={[
+    { text: "Commit it now, while it works", correct: true, explain: "This is the habit. A working state is exactly when you want a save point." },
+    { text: "Wait until the whole feature is 100% done, hours from now", explain: "Then a single mistake can cost you hours. Small, frequent commits keep you safe." },
+    { text: "Only commit at the end of the day", explain: "Time of day is irrelevant — commit at logical 'this works' moments, however often they come." },
+  ]}
+  client:visible
+/>
+
+<TryItInRepo>
+  Time to actually do it. In any project you have locally (or a throwaway folder):
+
+  1. Create a file — even just a `notes.txt` with one line in it.
+  2. Run `git status`. See your file listed as untracked or modified.
+  3. Run `git add .` then `git status` again — notice how the file moved to "staged."
+  4. Run `git commit -m "My first real commit"`.
+  5. Run `git log --oneline` and admire your save point.
+
+  If the folder isn't a git project yet, run `git init` first to create the `.git` time
+  machine. That's it — you've made a commit.
+</TryItInRepo>

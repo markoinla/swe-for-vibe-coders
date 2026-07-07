@@ -1,0 +1,90 @@
+---
+title: Review what the AI wrote
+description: You are the senior engineer now. Here's how to actually read a generated change.
+module: working-with-ai
+order: 2
+minutes: 11
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+import Callout from '../../../components/Callout.astro';
+import Terminal from '../../../components/Terminal.astro';
+import TryItInRepo from '../../../components/TryItInRepo.astro';
+
+Here's the mindset shift that makes you good at this: **when the AI writes code, you're not
+the typist — you're the reviewer.** Your job is to read the change and decide whether it's
+right. That sounds hard. It's a skill, and it's learnable.
+
+## Accepting code you didn't read is the #1 mistake
+
+The AI is confident. Its code looks clean. It's *usually* right. All of that makes it easy to
+hit "accept" without looking — and that's exactly how bugs and security holes slip in. A
+suggestion being well-formatted tells you nothing about whether it's correct.
+
+<Callout type="danger" title="The habit to break">
+  "It looked fine so I accepted it" is how most AI-introduced bugs happen. Looking fine and
+  being correct are different things. Always read the diff before accepting.
+</Callout>
+
+## Read the diff, not the vibe
+
+You already learned to read a diff in the last module. That's your main tool here. Before
+accepting a change, scan it and ask three questions:
+
+- **Did it change more than I asked?** If you asked to fix a button and it also "helpfully"
+  rewrote your database code, that's a red flag.
+- **Did it delete anything I need?** Watch the red `-` lines. AI sometimes removes code it
+  didn't understand.
+- **Do I roughly understand what each part does?** You don't need to grasp every line, but if
+  a whole section is a mystery, ask the AI to explain it before accepting.
+
+<Terminal cmd="git diff" out={`@@ -12,7 +12,7 @@ function saveUser(user) {
+-  db.save(user);
++  db.save(user);
++  sendMarketingEmail(user.email);
+ }`} />
+
+That diff was supposed to be a small fix — but it quietly added a `sendMarketingEmail` call.
+Reading the diff caught something you never asked for. That's the whole point.
+
+<Quiz
+  question="You asked the AI to 'fix the typo in the header.' The diff shows the typo fix AND a rewrite of an unrelated function. What should you do?"
+  options={[
+    { text: "Accept it — more changes means more work done", explain: "Unrequested changes are risk, not bonus value. You didn't review or ask for that rewrite." },
+    { text: "Reject or revert the extra change and keep only the typo fix", correct: true, explain: "Right. Scope creep in a diff is a red flag — take only the change you asked for and understand." },
+    { text: "Accept it but don't commit", explain: "The unreviewed change is still in your working files causing potential bugs. Get rid of what you didn't ask for." },
+  ]}
+  client:visible
+/>
+
+## Ask "why," not just "what"
+
+When you don't understand a piece of generated code, the AI is also your best tutor. Paste it
+back and ask: *"Explain what this does and why."* You'll learn faster than from any textbook,
+because you're learning on your own real code.
+
+<Callout type="tip" title="Turn review into learning">
+  Every diff you review is a free lesson. Over a few weeks of actually reading generated code
+  and asking about the confusing parts, you'll start writing better prompts *and* understanding
+  your own codebase — the exact skills this course is about.
+</Callout>
+
+<Quiz
+  question="What's the best reason to read AI-generated code even when it 'looks fine'?"
+  options={[
+    { text: "Looking clean says nothing about being correct — or about what it quietly changed", correct: true, explain: "Exactly. Formatting and confidence aren't correctness. Reading is how you catch the difference." },
+    { text: "So you can retype it yourself to be safe", explain: "No need to retype — the value is in reviewing and understanding, not re-keying." },
+    { text: "Reading code is required before every git commit by the tool", explain: "Nothing forces you to read it. That's the problem — the discipline has to come from you." },
+  ]}
+  client:visible
+/>
+
+<TryItInRepo>
+  Turn on your reviewer brain:
+
+  1. Ask your AI tool for a small change in a real project.
+  2. **Before accepting**, open the diff and answer the three questions: did it change more
+     than I asked? Did it delete anything I need? Do I understand each part?
+  3. Pick one line or block you're unsure about and ask the AI to explain it.
+  4. Only then accept (or reject) — and commit if you kept it.
+</TryItInRepo>

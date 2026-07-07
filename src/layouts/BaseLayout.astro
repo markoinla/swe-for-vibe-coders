@@ -1,0 +1,54 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'An interactive course teaching software engineering basics to vibe coders.' } = Astro.props;
+const fullTitle = title === 'SWE for Vibe Coders' ? title : `${title} · SWE for Vibe Coders`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <header class="sticky top-0 z-10 border-b border-line bg-surface/85 backdrop-blur-md">
+      <div class="container container-wide flex h-[60px] items-center justify-between">
+        <a href="/" class="text-[1.05rem] font-extrabold tracking-tight text-body no-underline">
+          SWE<span class="text-accent">.</span>for vibe coders
+        </a>
+        <nav class="flex items-center gap-[22px] text-[0.95rem]">
+          <a href="/#curriculum" class="text-muted no-underline hover:text-body">Curriculum</a>
+          <a href="/about" class="text-muted no-underline hover:text-body">About</a>
+          <a href="https://github.com/markoinla/swe-for-vibe-coders" target="_blank" rel="noopener" class="text-muted no-underline hover:text-body">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="mt-20 border-t border-line py-8 text-[0.9rem] text-muted">
+      <div class="container container-wide">
+        <p>
+          Built with <a href="https://astro.build" target="_blank" rel="noopener" class="text-accent underline">Astro</a> +
+          Tailwind, hosted on Cloudflare. A hands-on introduction to software engineering for
+          people who got here by vibe coding.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

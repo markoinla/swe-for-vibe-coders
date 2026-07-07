@@ -1,0 +1,113 @@
+---
+title: Reading a diff & undoing safely
+description: See exactly what changed, and get back to safety when a change goes wrong.
+module: version-control
+order: 4
+minutes: 12
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+import Callout from '../../../components/Callout.astro';
+import Terminal from '../../../components/Terminal.astro';
+import TryItInRepo from '../../../components/TryItInRepo.astro';
+
+Two skills round out the basics: **reading a diff** (seeing what changed) and **undoing**
+(getting back to safety). Together they make you fearless.
+
+## What a diff is
+
+A **diff** shows exactly what changed between two versions — line by line. When your AI
+assistant edits code, the diff is how you check its work before trusting it. Learning to
+read one is the single best defense against "the AI changed something and I don't know what."
+
+Run `git diff` to see your unsaved changes:
+
+<Terminal cmd="git diff" out={`diff --git a/greeting.js b/greeting.js
+index e69de29..8b1a2c3 100644
+--- a/greeting.js
++++ b/greeting.js
+@@ -1,3 +1,3 @@
+ function greet(name) {
+-  return "Hi " + name;
++  return "Hello, " + name + "!";
+ }`} />
+
+Ignore the noisy header lines. The part that matters is the bottom:
+
+- Lines starting with **`-`** (often red) were **removed**.
+- Lines starting with **`+`** (often green) were **added**.
+- Lines with no mark are unchanged, shown for context.
+
+So this diff says: the old greeting `"Hi " + name` was replaced with `"Hello, " + name + "!"`.
+That's it. A diff is just *removed lines* and *added lines*, side by side.
+
+<Quiz
+  question="In a diff, a line that starts with a minus sign (-) means what?"
+  options={[
+    { text: "That line was removed from the file", correct: true, explain: "Correct. Minus means gone, plus means added. That's the whole language of diffs." },
+    { text: "That line has an error in it", explain: "Diffs say nothing about errors — only what changed. A '-' line was simply removed." },
+    { text: "That line is a comment", explain: "Comment syntax varies by language; the '-' here is git marking a removed line." },
+  ]}
+  client:visible
+/>
+
+<Callout type="tip" title="This is how you review AI code">
+  Before accepting a big AI change, look at the diff. Green lines are what it added, red
+  lines are what it took away. If you see it deleting something you needed, you caught it
+  *before* it became a problem.
+</Callout>
+
+## Undoing, from gentle to nuclear
+
+Things go wrong. Here's your ladder of undo, from safest to most drastic.
+
+**1. Throw away unsaved changes to one file.** You edited a file, it's worse, you haven't
+committed. Restore it to the last commit:
+
+<Terminal cmd="git restore greeting.js" />
+
+The file snaps back to how it was at your last save point. (Your other files are untouched.)
+
+**2. Go back to how a whole project looked at a past commit.** This is why you commit often
+— every commit is a place you can return to.
+
+<Callout type="danger" title="The golden rule of undoing">
+  Commit first, experiment second. If your work is committed, it is *very* hard to truly lose.
+  Almost every scary git story starts with "I hadn't committed in a while." Frequent commits
+  turn every mistake into a minor, recoverable annoyance.
+</Callout>
+
+<Quiz
+  question="You spent an hour on a feature but never committed, and now it's badly broken. What's the lesson for next time?"
+  options={[
+    { text: "Commit small and often, so a bad state is only ever minutes from a good save point", correct: true, explain: "Exactly. Frequent commits are what make undo powerful. The fix is a better habit, not a fancier command." },
+    { text: "Never edit more than one file at a time", explain: "You can edit plenty of files — the safety comes from committing working states often, not from editing less." },
+    { text: "Avoid git so there's nothing to go wrong", explain: "Git is the thing that would have saved you here. The problem was not using it enough." },
+  ]}
+  client:visible
+/>
+
+## Putting the module together
+
+You can now: take snapshots (commit), work safely in parallel (branch), see what changed
+(diff), and get back to safety (restore). That's the core of version control — and honestly
+more than a lot of working developers can clearly explain.
+
+<TryItInRepo title="Module project: rescue yourself">
+  Prove the safety net works end to end:
+
+  1. In a git project, make sure everything is committed (`git status` shows a clean tree).
+  2. Now **deliberately break something** — delete a chunk of a working file and save it.
+  3. Run `git diff` and read what you removed (the red `-` lines).
+  4. Run `git restore <that-file>` to undo it.
+  5. Confirm with `git status` that you're back to clean.
+
+  You just broke your code and recovered it in four commands. That confidence — knowing you
+  can always get back — is the whole point of this module.
+</TryItInRepo>
+
+<Callout type="tip" title="Next up">
+  With version control under your belt, the next module — **Working with AI Tools** — builds
+  directly on it: how to commit around AI experiments, review generated diffs, and stay in
+  control of a codebase you're building together.
+</Callout>

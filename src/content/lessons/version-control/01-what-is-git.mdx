@@ -1,0 +1,87 @@
+---
+title: What version control actually is
+description: The mental model that makes git make sense — before you touch a single command.
+module: version-control
+order: 1
+minutes: 8
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+import Callout from '../../../components/Callout.astro';
+import Terminal from '../../../components/Terminal.astro';
+
+You've probably seen `git` scroll past in your terminal, or watched your AI assistant
+run commands you didn't fully follow. Let's fix that — starting with the idea, not the syntax.
+
+## The problem git solves
+
+Imagine writing an essay with no undo button, no version history, and no way to see what
+changed between yesterday and today. If you broke something, your only hope would be
+remembering exactly what you typed. That's what coding without version control feels like.
+
+You've maybe felt this already: you asked the AI to "refactor this," it changed twelve
+files, something broke, and now you can't get back to the version that worked. That sinking
+feeling is the exact problem git exists to eliminate.
+
+<Callout type="tip" title="The one-sentence version">
+  Git is a **time machine for your code**. It records snapshots of your project so you can
+  see what changed, go back to any earlier point, and never lose working code again.
+</Callout>
+
+## Snapshots, not files
+
+Here's the key shift in thinking. Git doesn't just save files — it saves **snapshots** of
+your entire project at moments *you* choose. Each snapshot is called a **commit**.
+
+Think of it like a video game:
+
+- A **commit** is a save point. "Everything works right now — save."
+- Your **history** is the list of every save point, in order.
+- If a boss fight (a risky change) goes badly, you **reload** an earlier save.
+
+The magic is that these save points are cheap, permanent, and labeled. Six months from now
+you can look back and see *exactly* what your project looked like, and what changed, at
+every step.
+
+## Where does all this live?
+
+When a project uses git, there's a hidden `.git` folder in it. That folder is the "time
+machine" — it quietly stores every snapshot you've ever made. You almost never touch it
+directly; you just run git commands and it does the bookkeeping.
+
+<Terminal cmd="git status" out={`On branch main
+nothing to commit, working tree clean`} />
+
+`git status` is the command you'll run most. It answers "what's going on right now?" —
+what's changed, what's saved, what isn't. When in doubt, run `git status`. It's impossible
+to break anything with it.
+
+<Quiz
+  question="In git terms, what is a 'commit'?"
+  options={[
+    { text: "A promise to finish a feature by a deadline", explain: "That's the everyday English meaning, but not what it means in git." },
+    { text: "A saved snapshot of your project at a moment you chose", correct: true, explain: "Exactly — a labeled save point you can always return to." },
+    { text: "A live copy of your code running on a server", explain: "That's closer to 'deployment.' A commit is a snapshot stored in history, not something running." },
+    { text: "A folder where your files are stored", explain: "Files live in your project folder; a commit is a point-in-time snapshot of them, stored in git's history." },
+  ]}
+  client:visible
+/>
+
+## Why this matters more when you vibe code
+
+When an AI is writing large chunks of your code, *you* are the one who has to stay oriented.
+Commits are how you do that. Commit when things work, and every AI experiment afterward
+becomes safe: if the next suggestion is a mess, you throw it away and you're instantly back
+to solid ground.
+
+That's the whole game. In the next lesson you'll make your first commit and feel it click.
+
+<Quiz
+  question="You ask your AI tool to 'improve' a file that currently works. What's the smart move first?"
+  options={[
+    { text: "Make a commit so you have a save point to return to", correct: true, explain: "Yes. Commit the working version, then experiment freely — you can always come back." },
+    { text: "Delete the file so the AI starts fresh", explain: "You'd lose working code for no reason. Snapshot it instead." },
+    { text: "Nothing — you can always undo with Ctrl+Z", explain: "Editor undo is fragile and disappears when you close the file. A commit is a permanent, reliable save point." },
+  ]}
+  client:visible
+/>

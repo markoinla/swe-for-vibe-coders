@@ -1,0 +1,84 @@
+---
+title: Write prompts like specs
+description: The difference between a vague wish and a clear instruction — and why it changes the output.
+module: working-with-ai
+order: 3
+minutes: 10
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+import Callout from '../../../components/Callout.astro';
+import TryItInRepo from '../../../components/TryItInRepo.astro';
+
+A vague prompt gets a vague guess. A clear prompt gets close to what you actually wanted. In
+real engineering this clarity is called a **specification** — a precise description of what
+should happen. You don't need to write formal specs, but the closer your prompt gets, the
+better the result.
+
+## Vague in, vague out
+
+Compare these two asks for the same feature:
+
+> ❌ "Make the form better."
+
+> ✅ "On the signup form, add a password field below the email field. Require at least 8
+> characters, and show a red message under the field if it's shorter."
+
+The first makes the AI guess what "better" means — it might change colors, add fields you
+don't want, or restyle the whole thing. The second leaves little to chance. Same effort to
+type, wildly different results.
+
+<Callout type="tip" title="The four things a good prompt usually names">
+  **Where** the change goes, **what** should happen, **any rules or limits** (like "at least
+  8 characters"), and **what it should look/behave like** when done. Hit those and the AI
+  rarely has to guess.
+</Callout>
+
+## Give it the context it can't see
+
+The AI doesn't automatically know your intentions, your constraints, or the parts of your
+project it isn't looking at. Tell it. "We use Tailwind for styling," "keep it consistent with
+the other buttons," "don't touch the database code" — each sentence removes a way for it to
+go wrong.
+
+<Quiz
+  question="Which prompt is most likely to get you what you want on the first try?"
+  options={[
+    { text: "\"Improve the checkout page.\"", explain: "Improve how? The AI has to guess your definition of better — and will probably guess wrong." },
+    { text: "\"Add a 'Continue shopping' link to the top-left of the checkout page that goes back to /products.\"", correct: true, explain: "Right — it names where, what, and the exact behavior. Almost nothing left to guess." },
+    { text: "\"Fix the checkout.\"", explain: "Fix what? There's no described problem or desired outcome for the AI to aim at." },
+  ]}
+  client:visible
+/>
+
+## Iterate — don't expect one perfect shot
+
+Even great prompts need follow-ups, and that's normal. Treat it as a conversation: look at
+what you got, then refine. "Close, but make the button blue and move it above the total."
+Small corrective nudges beat rewriting a giant prompt from scratch.
+
+<Callout type="warning" title="If you're correcting the same thing repeatedly">
+  When you keep fixing the AI in the same direction, bake that into your instruction next
+  time — or into a project rules file if your tool supports one. Saying "always use our
+  existing components" once, up front, beats correcting it ten times.
+</Callout>
+
+<Quiz
+  question="You asked for a feature and the result is 80% right. What's the most effective next move?"
+  options={[
+    { text: "Give a small, specific follow-up describing exactly what to change", correct: true, explain: "Yes — iterate with a precise nudge. It's faster and clearer than starting over." },
+    { text: "Delete everything and write one giant new prompt", explain: "You'd throw away the 80% that's working. Refine what you have instead." },
+    { text: "Accept it as-is since most of it is fine", explain: "Shipping the wrong 20% causes bugs. A quick specific correction gets you to 100%." },
+  ]}
+  client:visible
+/>
+
+<TryItInRepo>
+  Feel the difference clarity makes:
+
+  1. Think of a change you want in a real project.
+  2. Write the **vague** version of the prompt first (e.g. "make the header nicer") — and
+     notice how many ways it could be interpreted.
+  3. Now rewrite it naming **where, what, the rules, and the desired result.**
+  4. Send the clear version. Compare it to what the vague one would have given you.
+</TryItInRepo>

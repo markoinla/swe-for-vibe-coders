@@ -1,0 +1,13 @@
+# Cloudflare Pages configuration.
+#
+# This is a fully static site, so there is no Worker/SSR entrypoint — Pages just
+# serves the built `dist/` directory. The Git integration builds with `npm run build`
+# and deploys the output below; the dashboard build settings should be:
+#   Build command:    npm run build
+#   Output directory: dist
+#
+# Keeping this file in the repo also lets you deploy manually with:
+#   npx wrangler pages deploy dist
+name = "swe-for-vibe-coders"
+compatibility_date = "2026-07-07"
+pages_build_output_dir = "dist"
