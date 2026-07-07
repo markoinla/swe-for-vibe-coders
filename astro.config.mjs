@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
 
 // Static output deploys directly to Cloudflare Pages (build command `npm run build`,
 // output directory `dist`). Interactivity is delivered via client-side Preact islands,
@@ -12,4 +13,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://swe-for-vibe-coders.pages.dev',
   integrations: [mdx(), preact(), sitemap()],
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });

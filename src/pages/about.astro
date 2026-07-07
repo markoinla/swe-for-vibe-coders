@@ -2,9 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="About" description="Why SWE for Vibe Coders exists and who it's for.">
-  <section class="container prose about">
-    <h1>About this course</h1>
-    <p class="lede">
+  <section class="container prose py-12">
+    <h1 class="text-[2.4rem]">About this course</h1>
+    <p class="text-[1.2rem] text-muted">
       AI coding tools made it possible to build real, working software without ever
       learning the craft underneath it. That’s genuinely great. But there’s a gap:
       the tools happily write code for you and quietly assume you know what a commit
@@ -40,9 +40,3 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </p>
   </section>
 </BaseLayout>
-
-<style>
-  .about { padding: 48px 0 40px; }
-  .about h1 { font-size: 2.4rem; }
-  .lede { font-size: 1.2rem; color: var(--text-muted); }
-</style>

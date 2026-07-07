@@ -9,50 +9,12 @@ interface Props {
 }
 const { cmd, out, title = 'terminal' } = Astro.props;
 ---
-<div class="term">
-  <div class="term-bar">
-    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-    <span class="term-title">{title}</span>
+<div class="my-7 overflow-hidden rounded-card border border-line-strong shadow-[var(--shadow-card)]">
+  <div class="flex items-center gap-1.5 bg-[#2a2740] px-3.5 py-[9px]">
+    <span class="inline-block h-[11px] w-[11px] rounded-full bg-[#ff5f57]"></span>
+    <span class="inline-block h-[11px] w-[11px] rounded-full bg-[#febc2e]"></span>
+    <span class="inline-block h-[11px] w-[11px] rounded-full bg-[#28c840]"></span>
+    <span class="ml-2 font-mono text-[0.78rem] text-[#b3aecb]">{title}</span>
   </div>
-  <pre class="term-body"><span class="prompt">$</span> <span class="cmd">{cmd}</span>{out ? '\n' + out : ''}</pre>
+  <pre class="m-0 overflow-x-auto whitespace-pre-wrap bg-code-bg px-[18px] py-4 font-mono text-[0.9rem] leading-relaxed text-code-text"><span class="mr-2 select-none text-[#8b85f5]">$</span><span class="text-[#a5f3b0]">{cmd}</span>{out ? '\n' + out : ''}</pre>
 </div>
-
-<style>
-  .term {
-    margin: 28px 0;
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 1px solid var(--border-strong);
-    box-shadow: var(--shadow);
-  }
-  .term-bar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 14px;
-    background: #2a2740;
-  }
-  .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
-  .dot.r { background: #ff5f57; }
-  .dot.y { background: #febc2e; }
-  .dot.g { background: #28c840; }
-  .term-title {
-    margin-left: 8px;
-    font-size: 0.78rem;
-    color: #b3aecb;
-    font-family: var(--font-mono);
-  }
-  .term-body {
-    margin: 0;
-    background: var(--code-bg);
-    color: var(--code-text);
-    padding: 16px 18px;
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    overflow-x: auto;
-    white-space: pre-wrap;
-  }
-  .prompt { color: #8b85f5; user-select: none; margin-right: 8px; }
-  .cmd { color: #a5f3b0; }
-</style>

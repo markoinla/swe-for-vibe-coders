@@ -7,60 +7,59 @@ const lessons = await getCollection('lessons', ({ data }) => data.published);
 const lessonCount = (slug: string) =>
   lessons.filter((l) => l.data.module === slug).length;
 
-// First lesson of the first available module, for the primary CTA.
 const firstModule = modules.find((m) => m.status === 'available');
 const firstLesson = firstModule
   ? lessons
       .filter((l) => l.data.module === firstModule.slug)
       .sort((a, b) => a.data.order - b.data.order)[0]
   : undefined;
+
+const pitches = [
+  { icon: '🧠', title: 'Concepts that click', body: 'Plain-language explanations with real examples — no CS-degree jargon, no gatekeeping.' },
+  { icon: '🎯', title: 'Check yourself', body: 'Quick interactive questions after each idea so you know it landed before moving on.' },
+  { icon: '🛠️', title: 'Do it for real', body: 'Each module ends with a hands-on exercise in an actual repo — the tools you already use.' },
+];
 ---
 
 <BaseLayout title="SWE for Vibe Coders">
-  <section class="hero">
-    <div class="container">
-      <p class="eyebrow">For people who ship with AI</p>
-      <h1>Software engineering<br />for vibe coders.</h1>
-      <p class="sub">
-        You can already build things. This is the stuff the AI never sat you down and
-        explained — version control, testing, not leaking your API keys — taught in
-        short, interactive lessons you actually do, not just read.
-      </p>
-      <div class="hero-cta">
-        {firstLesson && (
-          <a class="btn" href={`/lessons/${firstLesson.id}`}>Start with {firstModule?.title} →</a>
-        )}
-        <a class="btn secondary" href="#curriculum">See the curriculum</a>
-      </div>
+  <!-- Hero -->
+  <section class="container container-wide py-[72px] text-center">
+    <p class="mb-4 text-[0.8rem] font-bold uppercase tracking-[0.12em] text-accent">For people who ship with AI</p>
+    <h1 class="m-0 text-[clamp(2.4rem,6vw,3.6rem)] tracking-tight">Software engineering<br />for vibe coders.</h1>
+    <p class="mx-auto mt-[22px] max-w-[620px] text-[1.18rem] text-muted">
+      You can already build things. This is the stuff the AI never sat you down and
+      explained — version control, testing, not leaking your API keys — taught in
+      short, interactive lessons you actually do, not just read.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      {firstLesson && (
+        <a class="btn no-underline" href={`/lessons/${firstLesson.id}`}>Start with {firstModule?.title} →</a>
+      )}
+      <a class="btn btn-secondary no-underline" href="#curriculum">See the curriculum</a>
     </div>
   </section>
 
-  <section class="pitch container">
-    <div class="pitch-grid">
-      <div class="pitch-card">
-        <span class="pitch-icon">🧠</span>
-        <h3>Concepts that click</h3>
-        <p>Plain-language explanations with real examples — no CS-degree jargon, no gatekeeping.</p>
-      </div>
-      <div class="pitch-card">
-        <span class="pitch-icon">🎯</span>
-        <h3>Check yourself</h3>
-        <p>Quick interactive questions after each idea so you know it landed before moving on.</p>
-      </div>
-      <div class="pitch-card">
-        <span class="pitch-icon">🛠️</span>
-        <h3>Do it for real</h3>
-        <p>Each module ends with a hands-on exercise in an actual repo — the tools you already use.</p>
-      </div>
+  <!-- Pitch -->
+  <section class="container container-wide pb-2 pt-6">
+    <div class="grid grid-cols-3 gap-[18px] max-[720px]:grid-cols-1">
+      {pitches.map((p) => (
+        <div class="rounded-card border border-line bg-elevated p-[22px]">
+          <span class="text-[1.6rem]">{p.icon}</span>
+          <h3 class="mb-1.5 mt-3 text-[1.1rem]">{p.title}</h3>
+          <p class="m-0 text-[0.96rem] text-muted">{p.body}</p>
+        </div>
+      ))}
     </div>
   </section>
 
-  <section id="curriculum" class="container wide curriculum">
-    <div class="section-head">
-      <h2>The curriculum</h2>
-      <p>Seven modules, built to be taken in order. Start anywhere, but version control first pays off everywhere else.</p>
+  <!-- Curriculum -->
+  <section id="curriculum" class="container container-wide pb-5 pt-16">
+    <div class="mx-auto mb-9 max-w-[620px] text-center">
+      <h2 class="m-0 text-[2rem]">The curriculum</h2>
+      <p class="mt-3 text-muted">Seven modules, built to be taken in order. Start anywhere, but version control first pays off everywhere else.</p>
     </div>
-    <ol class="module-list">
+
+    <ol class="m-0 flex list-none flex-col gap-3.5 p-0">
       {modules.map((mod, i) => {
         const count = lessonCount(mod.slug);
         const available = mod.status === 'available';
@@ -68,22 +67,26 @@ const firstLesson = firstModule
         return (
           <li>
             <Tag
-              class={`module-card ${available ? '' : 'locked'}`}
+              class={`group flex items-start gap-[18px] rounded-card border border-line bg-elevated px-6 py-[22px] text-body transition-all ${available ? 'no-underline hover:-translate-y-px hover:border-accent hover:shadow-[var(--shadow-card)]' : 'opacity-70'}`}
               {...(available ? { href: `/modules/${mod.slug}` } : {})}
             >
-              <span class="module-num">{String(i + 1).padStart(2, '0')}</span>
-              <span class="module-emoji">{mod.emoji}</span>
-              <div class="module-text">
-                <div class="module-title-row">
-                  <h3>{mod.title}</h3>
+              <span class="pt-1 font-mono text-[0.9rem] text-muted">{String(i + 1).padStart(2, '0')}</span>
+              <span class="text-[1.8rem] leading-none max-[720px]:hidden">{mod.emoji}</span>
+              <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-3">
+                  <h3 class="m-0 text-[1.25rem]">{mod.title}</h3>
                   {available ? (
-                    <span class="pill available">{count} {count === 1 ? 'lesson' : 'lessons'}</span>
+                    <span class="rounded-full bg-accent-soft px-2.5 py-[3px] text-[0.72rem] font-bold uppercase tracking-wider text-accent">
+                      {count} {count === 1 ? 'lesson' : 'lessons'}
+                    </span>
                   ) : (
-                    <span class="pill soon">Coming soon</span>
+                    <span class="rounded-full bg-sunken px-2.5 py-[3px] text-[0.72rem] font-bold uppercase tracking-wider text-muted">
+                      Coming soon
+                    </span>
                   )}
                 </div>
-                <p class="module-tagline">{mod.tagline}</p>
-                <p class="module-desc">{mod.description}</p>
+                <p class="mt-1.5 font-semibold text-body">{mod.tagline}</p>
+                <p class="mt-1.5 text-[0.96rem] text-muted">{mod.description}</p>
               </div>
             </Tag>
           </li>
@@ -92,116 +95,3 @@ const firstLesson = firstModule
     </ol>
   </section>
 </BaseLayout>
-
-<style>
-  .hero {
-    padding: 72px 0 48px;
-    text-align: center;
-  }
-  .eyebrow {
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--accent);
-    margin: 0 0 16px;
-  }
-  .hero h1 {
-    font-size: clamp(2.4rem, 6vw, 3.6rem);
-    margin: 0;
-    letter-spacing: -0.035em;
-  }
-  .hero .sub {
-    max-width: 620px;
-    margin: 22px auto 0;
-    font-size: 1.18rem;
-    color: var(--text-muted);
-  }
-  .hero-cta {
-    margin-top: 32px;
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .pitch { padding: 24px 0 8px; }
-  .pitch-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-  .pitch-card {
-    padding: 22px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg-elevated);
-  }
-  .pitch-icon { font-size: 1.6rem; }
-  .pitch-card h3 { margin: 12px 0 6px; font-size: 1.1rem; }
-  .pitch-card p { margin: 0; color: var(--text-muted); font-size: 0.96rem; }
-
-  .curriculum { padding: 64px 0 20px; }
-  .section-head { text-align: center; max-width: 620px; margin: 0 auto 36px; }
-  .section-head h2 { font-size: 2rem; margin: 0; }
-  .section-head p { color: var(--text-muted); margin: 12px 0 0; }
-
-  .module-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .module-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 18px;
-    padding: 22px 24px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg-elevated);
-    color: var(--text);
-    transition: border-color 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
-  }
-  a.module-card:hover {
-    border-color: var(--accent);
-    text-decoration: none;
-    box-shadow: var(--shadow);
-    transform: translateY(-1px);
-  }
-  .module-card.locked { opacity: 0.72; }
-  .module-num {
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    padding-top: 4px;
-  }
-  .module-emoji { font-size: 1.8rem; line-height: 1; }
-  .module-text { flex: 1; }
-  .module-title-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .module-title-row h3 { margin: 0; font-size: 1.25rem; }
-  .pill {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 3px 10px;
-    border-radius: 999px;
-  }
-  .pill.available { background: var(--accent-soft); color: var(--accent); }
-  .pill.soon { background: var(--bg-sunken); color: var(--text-muted); }
-  .module-tagline { margin: 6px 0 0; font-weight: 600; color: var(--text); }
-  .module-desc { margin: 6px 0 0; color: var(--text-muted); font-size: 0.96rem; }
-
-  @media (max-width: 720px) {
-    .pitch-grid { grid-template-columns: 1fr; }
-    .module-emoji { display: none; }
-  }
-</style>

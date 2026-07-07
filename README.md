@@ -4,8 +4,8 @@ An interactive course teaching software-engineering basics and best practices to
 who got into building through vibe coding. Short lessons, check-yourself questions, and
 hands-on exercises in real repos.
 
-Built with [Astro](https://astro.build) + interactive [Preact](https://preactjs.com)
-islands, designed to deploy to Cloudflare Pages.
+Built with [Astro](https://astro.build), [Tailwind CSS](https://tailwindcss.com) v4, and
+interactive [Preact](https://preactjs.com) islands, designed to deploy to Cloudflare Pages.
 
 ## Getting started
 
@@ -31,8 +31,16 @@ src/
 ├─ components/                      # Quiz (interactive), Callout, Terminal, TryItInRepo
 ├─ layouts/                         # page + lesson shells
 ├─ pages/                           # home, about, module pages, lesson router
-└─ styles/global.css                # design system (light + dark)
+└─ styles/global.css                # Tailwind entry + design tokens (light + dark)
 ```
+
+### Styling
+
+Tailwind v4 is wired in via `@tailwindcss/vite`. The colour system lives as CSS variables
+in `src/styles/global.css` that flip with the OS light/dark preference, and they're mapped
+into Tailwind's theme (`@theme inline`) — so utilities like `bg-surface`, `text-body`, and
+`border-line` are automatically dark-mode aware, with no `dark:` classes needed. A few
+reusable classes (`.btn`, `.container`) are defined with `@apply`.
 
 ### Writing a lesson
 

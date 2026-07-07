@@ -24,13 +24,15 @@ const fullTitle = title === 'SWE for Vibe Coders' ? title : `${title} · SWE for
     <meta name="generator" content={Astro.generator} />
   </head>
   <body>
-    <header class="site-header">
-      <div class="container bar">
-        <a href="/" class="brand">SWE<span class="dot">.</span>for vibe coders</a>
-        <nav class="nav-links">
-          <a href="/#curriculum">Curriculum</a>
-          <a href="/about">About</a>
-          <a href="https://github.com/markoinla/swe-for-vibe-coders" target="_blank" rel="noopener">GitHub</a>
+    <header class="sticky top-0 z-10 border-b border-line bg-surface/85 backdrop-blur-md">
+      <div class="container container-wide flex h-[60px] items-center justify-between">
+        <a href="/" class="text-[1.05rem] font-extrabold tracking-tight text-body no-underline">
+          SWE<span class="text-accent">.</span>for vibe coders
+        </a>
+        <nav class="flex items-center gap-[22px] text-[0.95rem]">
+          <a href="/#curriculum" class="text-muted no-underline hover:text-body">Curriculum</a>
+          <a href="/about" class="text-muted no-underline hover:text-body">About</a>
+          <a href="https://github.com/markoinla/swe-for-vibe-coders" target="_blank" rel="noopener" class="text-muted no-underline hover:text-body">GitHub</a>
         </nav>
       </div>
     </header>
@@ -39,11 +41,11 @@ const fullTitle = title === 'SWE for Vibe Coders' ? title : `${title} · SWE for
       <slot />
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
+    <footer class="mt-20 border-t border-line py-8 text-[0.9rem] text-muted">
+      <div class="container container-wide">
         <p>
-          Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>,
-          hosted on Cloudflare. A hands-on introduction to software engineering for
+          Built with <a href="https://astro.build" target="_blank" rel="noopener" class="text-accent underline">Astro</a> +
+          Tailwind, hosted on Cloudflare. A hands-on introduction to software engineering for
           people who got here by vibe coding.
         </p>
       </div>

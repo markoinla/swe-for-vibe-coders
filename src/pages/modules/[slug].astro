@@ -18,89 +18,34 @@ const lessons = (await getCollection('lessons', ({ data }) => data.published))
 ---
 
 <BaseLayout title={mod.title} description={mod.description}>
-  <section class="container module-hero">
-    <a class="back" href="/#curriculum">← All modules</a>
-    <div class="module-emoji">{mod.emoji}</div>
-    <h1>{mod.title}</h1>
-    <p class="tagline">{mod.tagline}</p>
-    <p class="desc">{mod.description}</p>
+  <section class="container mx-auto max-w-[620px] pb-2 pt-12 text-center">
+    <a class="mb-5 inline-block text-[0.9rem] text-muted no-underline hover:text-body" href="/#curriculum">← All modules</a>
+    <div class="text-[3rem]">{mod.emoji}</div>
+    <h1 class="mt-2 text-[2.4rem]">{mod.title}</h1>
+    <p class="mt-2 font-semibold">{mod.tagline}</p>
+    <p class="mt-3 text-muted">{mod.description}</p>
   </section>
 
-  <section class="container lesson-index">
-    <ol>
+  <section class="container max-w-[720px] pb-10 pt-8">
+    <ol class="m-0 flex list-none flex-col gap-2.5 p-0">
       {lessons.map((lesson, i) => (
         <li>
-          <a href={`/lessons/${lesson.id}`}>
-            <span class="ln">{i + 1}</span>
-            <span class="lt">
-              <span class="lt-title">{lesson.data.title}</span>
-              <span class="lt-desc">{lesson.data.description}</span>
+          <a
+            href={`/lessons/${lesson.id}`}
+            class="flex items-center gap-4 rounded-card border border-line bg-elevated px-5 py-4 text-body no-underline transition-colors hover:border-accent"
+          >
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent-soft font-bold text-accent">
+              {i + 1}
             </span>
-            <span class="lm">{lesson.data.minutes} min</span>
+            <span class="flex flex-1 flex-col">
+              <span class="font-semibold">{lesson.data.title}</span>
+              <span class="text-[0.9rem] text-muted">{lesson.data.description}</span>
+            </span>
+            <span class="shrink-0 text-[0.82rem] tabular-nums text-muted">{lesson.data.minutes} min</span>
           </a>
         </li>
       ))}
     </ol>
-    {lessons.length === 0 && <p class="empty">Lessons for this module are being written.</p>}
+    {lessons.length === 0 && <p class="text-muted">Lessons for this module are being written.</p>}
   </section>
 </BaseLayout>
-
-<style>
-  .module-hero {
-    padding: 48px 0 8px;
-    text-align: center;
-    max-width: 620px;
-  }
-  .back {
-    display: inline-block;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-bottom: 20px;
-  }
-  .module-emoji { font-size: 3rem; }
-  .module-hero h1 { font-size: 2.4rem; margin: 8px 0 0; }
-  .tagline { font-weight: 600; margin: 8px 0 0; }
-  .desc { color: var(--text-muted); margin: 12px 0 0; }
-
-  .lesson-index { max-width: 720px; padding: 32px 0 40px; }
-  .lesson-index ol {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .lesson-index a {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 20px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg-elevated);
-    color: var(--text);
-    transition: border-color 0.15s ease;
-  }
-  .lesson-index a:hover { border-color: var(--accent); text-decoration: none; }
-  .ln {
-    flex-shrink: 0;
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-weight: 700;
-    display: grid;
-    place-items: center;
-  }
-  .lt { flex: 1; display: flex; flex-direction: column; }
-  .lt-title { font-weight: 600; }
-  .lt-desc { font-size: 0.9rem; color: var(--text-muted); }
-  .lm {
-    flex-shrink: 0;
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    font-variant-numeric: tabular-nums;
-  }
-  .empty { color: var(--text-muted); }
-</style>

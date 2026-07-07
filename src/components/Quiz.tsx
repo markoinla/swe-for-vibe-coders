@@ -12,6 +12,8 @@ interface QuizProps {
   options: QuizOption[];
 }
 
+const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(' ');
+
 /**
  * A single multiple-choice question with immediate feedback. Interactive island —
  * hydrated on the client with `client:visible`. Keep questions checking
@@ -24,27 +26,44 @@ export default function Quiz({ question, options }: QuizProps) {
   const gotItRight = chosen?.correct ?? false;
 
   return (
-    <div class="quiz" data-answered={answered}>
-      <div class="quiz-q">
-        <span class="quiz-badge">Check yourself</span>
-        <p class="quiz-question">{question}</p>
+    <div data-quiz class="my-8 rounded-card border border-line-strong bg-elevated p-[22px] shadow-[var(--shadow-card)]">
+      <div>
+        <span class="inline-block rounded-full bg-accent-soft px-[9px] py-[3px] text-[0.72rem] font-bold uppercase tracking-wider text-accent">
+          Check yourself
+        </span>
+        <p class="mt-3 text-[1.12rem] font-semibold leading-snug">{question}</p>
       </div>
-      <ul class="quiz-options">
+
+      <ul class="mt-[18px] flex list-none flex-col gap-2.5 p-0">
         {options.map((opt, i) => {
           const isPicked = picked === i;
-          const reveal = answered;
-          let state = 'idle';
-          if (reveal && opt.correct) state = 'correct';
-          else if (reveal && isPicked && !opt.correct) state = 'wrong';
+          let state: 'idle' | 'correct' | 'wrong' = 'idle';
+          if (answered && opt.correct) state = 'correct';
+          else if (answered && isPicked && !opt.correct) state = 'wrong';
           return (
             <li key={i}>
               <button
                 type="button"
-                class={`quiz-option ${state}`}
                 disabled={answered}
                 onClick={() => setPicked(i)}
+                class={cx(
+                  'flex w-full items-start gap-3 rounded-btn border px-[15px] py-[13px] text-left text-base transition-colors',
+                  state === 'idle' &&
+                    'border-line-strong bg-surface text-body enabled:hover:border-accent enabled:hover:bg-accent-soft',
+                  state === 'correct' && 'border-success bg-success-soft text-body',
+                  state === 'wrong' && 'border-danger bg-danger-soft text-body',
+                  !answered && 'cursor-pointer',
+                )}
               >
-                <span class="marker" aria-hidden="true">
+                <span
+                  aria-hidden="true"
+                  class={cx(
+                    'grid h-6 w-6 shrink-0 place-items-center rounded-md text-[0.85rem] font-bold',
+                    state === 'idle' && 'bg-sunken text-muted',
+                    state === 'correct' && 'bg-success text-white',
+                    state === 'wrong' && 'bg-danger text-white',
+                  )}
+                >
                   {state === 'correct' ? '✓' : state === 'wrong' ? '✗' : String.fromCharCode(65 + i)}
                 </span>
                 <span>{opt.text}</span>
@@ -53,134 +72,30 @@ export default function Quiz({ question, options }: QuizProps) {
           );
         })}
       </ul>
+
       {answered && (
-        <div class={`quiz-feedback ${gotItRight ? 'good' : 'bad'}`}>
+        <div
+          class={cx(
+            'mt-4 rounded-btn px-4 py-3.5 text-[0.98rem] leading-snug',
+            gotItRight ? 'bg-success-soft text-success' : 'bg-danger-soft text-danger',
+          )}
+        >
           <strong>{gotItRight ? 'Correct.' : 'Not quite.'}</strong>{' '}
           {chosen?.explain ??
             (gotItRight
               ? 'Nice work.'
               : 'Take another look — the right answer is highlighted above.')}
           {!gotItRight && (
-            <button type="button" class="quiz-retry" onClick={() => setPicked(null)}>
+            <button
+              type="button"
+              class="mt-2.5 block cursor-pointer font-bold underline"
+              onClick={() => setPicked(null)}
+            >
               Try again
             </button>
           )}
         </div>
       )}
-
-      <style>{`
-        .quiz {
-          border: 1px solid var(--border-strong);
-          border-radius: var(--radius);
-          background: var(--bg-elevated);
-          padding: 22px;
-          margin: 32px 0;
-          box-shadow: var(--shadow);
-        }
-        .quiz-badge {
-          display: inline-block;
-          font-size: 0.72rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: var(--accent);
-          background: var(--accent-soft);
-          padding: 3px 9px;
-          border-radius: 999px;
-        }
-        .quiz-question {
-          font-size: 1.12rem;
-          font-weight: 600;
-          margin: 12px 0 0;
-          line-height: 1.5;
-        }
-        .quiz-options {
-          list-style: none;
-          padding: 0;
-          margin: 18px 0 0;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-        .quiz-option {
-          width: 100%;
-          text-align: left;
-          display: flex;
-          align-items: flex-start;
-          gap: 12px;
-          padding: 13px 15px;
-          border: 1px solid var(--border-strong);
-          border-radius: var(--radius-sm);
-          background: var(--bg);
-          color: var(--text);
-          font-size: 1rem;
-          font-family: inherit;
-          cursor: pointer;
-          transition: border-color 0.12s ease, background 0.12s ease;
-        }
-        .quiz-option:not(:disabled):hover {
-          border-color: var(--accent);
-          background: var(--accent-soft);
-        }
-        .quiz-option:disabled {
-          cursor: default;
-        }
-        .quiz-option .marker {
-          flex-shrink: 0;
-          width: 24px;
-          height: 24px;
-          border-radius: 6px;
-          background: var(--bg-sunken);
-          display: grid;
-          place-items: center;
-          font-size: 0.85rem;
-          font-weight: 700;
-          color: var(--text-muted);
-        }
-        .quiz-option.correct {
-          border-color: var(--success);
-          background: var(--success-soft);
-        }
-        .quiz-option.correct .marker {
-          background: var(--success);
-          color: #fff;
-        }
-        .quiz-option.wrong {
-          border-color: var(--danger);
-          background: var(--danger-soft);
-        }
-        .quiz-option.wrong .marker {
-          background: var(--danger);
-          color: #fff;
-        }
-        .quiz-feedback {
-          margin-top: 16px;
-          padding: 14px 16px;
-          border-radius: var(--radius-sm);
-          font-size: 0.98rem;
-          line-height: 1.55;
-        }
-        .quiz-feedback.good {
-          background: var(--success-soft);
-          color: var(--success);
-        }
-        .quiz-feedback.bad {
-          background: var(--danger-soft);
-          color: var(--danger);
-        }
-        .quiz-retry {
-          display: block;
-          margin-top: 10px;
-          background: none;
-          border: none;
-          padding: 0;
-          font: inherit;
-          font-weight: 700;
-          color: inherit;
-          text-decoration: underline;
-          cursor: pointer;
-        }
-      `}</style>
     </div>
   );
 }
