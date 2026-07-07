@@ -1,0 +1,96 @@
+---
+title: When to distrust the AI
+description: The model is confident even when it's wrong. Here's how to catch it before it costs you.
+module: working-with-ai
+order: 4
+minutes: 11
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+import Callout from '../../../components/Callout.astro';
+import TryItInRepo from '../../../components/TryItInRepo.astro';
+
+AI coding tools are genuinely great — and they will also, with total confidence, tell you
+things that are wrong. Learning where that happens is what keeps you out of trouble. This
+isn't about distrusting the tool; it's about knowing its failure modes so you can double-check
+the right things.
+
+## Confidence is not correctness
+
+The most important thing to internalize: **the AI sounds equally sure whether it's right or
+wrong.** There's no wobble in its voice when it invents a function that doesn't exist. So you
+can't use "it seems confident" as a signal. You need other checks.
+
+<Callout type="warning" title="'Hallucination', in plain terms">
+  Sometimes the AI makes up things that sound real but aren't — a library function that
+  doesn't exist, an API that works differently than it claims, a fact that's just wrong.
+  This is called a **hallucination**, and it's most common with niche tools, very recent
+  releases, and exact details like version numbers.
+</Callout>
+
+## Where to be extra skeptical
+
+Turn up your skepticism when the AI is dealing with:
+
+- **Anything security- or money-related** — auth, payments, permissions, deleting data. Wrong
+  here is expensive. Verify carefully.
+- **Exact facts** — version numbers, API parameter names, config values. These are easy to
+  hallucinate. Check the official docs.
+- **Very new or obscure tools** — the model may have little or outdated knowledge of them.
+- **"It'll definitely work" claims** — the only real proof is running it, not the AI's promise.
+
+<Quiz
+  question="The AI writes code using a function called db.autoBackup() and assures you it exists. You've never seen it in the docs. What's the right move?"
+  options={[
+    { text: "Trust it — the AI sounds certain", explain: "Certainty is not evidence. Invented-but-plausible functions are a classic hallucination." },
+    { text: "Verify it exists in the official docs (or just run it) before relying on it", correct: true, explain: "Exactly. Confirm against a real source or by running it — especially for something you can't find documented." },
+    { text: "Assume it's a new feature you haven't heard of", explain: "Maybe — but 'maybe' isn't good enough for code you'll depend on. Verify first." },
+  ]}
+  client:visible
+/>
+
+## Your best lie-detector: run it
+
+Here's the good news — you don't have to be an expert to catch most mistakes. **Running the
+code tells you the truth.** The app either works or it doesn't. A test either passes or fails
+(that's the next module). The AI's confidence is an opinion; the running program is a fact.
+
+<Callout type="tip" title="The loop that protects you">
+  Small change → **run it and see** → commit. You already know this loop from lesson 1. It's
+  also your main defense against hallucinations: reality checks the AI for you, every single
+  step.
+</Callout>
+
+<Quiz
+  question="What's the most reliable way to know whether AI-generated code actually works?"
+  options={[
+    { text: "Run it (or its tests) and observe the result", correct: true, explain: "Right — reality is the ground truth. Running the code beats any assurance the AI gives." },
+    { text: "Ask the AI 'are you sure?' and trust the answer", explain: "It'll usually say yes, just as confidently, whether or not it's right. Not a reliable check." },
+    { text: "Check that the code is neatly formatted", explain: "Formatting is unrelated to correctness. Clean code can be completely broken." },
+  ]}
+  client:visible
+/>
+
+## Putting the module together
+
+You now have the full loop for staying in control while coding with AI: **small steps, review
+every diff, prompt with clarity, and verify instead of trusting.** That's not a limitation on
+the tool — it's what lets you use it fearlessly, because nothing it does can get past you
+unchecked.
+
+<TryItInRepo title="Module project: catch a mistake on purpose">
+  Build the skeptic's reflex:
+
+  1. Ask your AI tool to build a small feature that touches something specific — e.g. "format
+     this date as DD/MM/YYYY."
+  2. **Don't trust the result — run it.** Does the output actually match what you asked?
+  3. If it's wrong, notice that it probably *looked* right. That gap between looks-right and
+     is-right is exactly what verifying closes.
+  4. Fix with a specific follow-up, run again to confirm, then commit.
+</TryItInRepo>
+
+<Callout type="tip" title="Next up">
+  You've leaned on "just run it and see" twice now. The **Testing Basics** module makes that
+  reliable and automatic — so you can verify a change in seconds without manually clicking
+  through your app every time.
+</Callout>

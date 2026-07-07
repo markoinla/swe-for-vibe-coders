@@ -30,7 +30,7 @@ export const modules: Module[] = [
     tagline: 'Drive the AI, don’t get driven',
     description:
       'Small changes, reviewing generated code, writing prompts as specs, and knowing when to distrust the machine. How to stay in control of a codebase the AI is helping you write.',
-    status: 'coming-soon',
+    status: 'available',
   },
   {
     slug: 'reading-code',
