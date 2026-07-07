@@ -1,0 +1,140 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { moduleBySlug } from '../data/modules';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'lessons'>;
+  prev?: { slug: string; title: string } | null;
+  next?: { slug: string; title: string } | null;
+  lessonIndex: number;
+  lessonCount: number;
+}
+
+const { entry, prev, next, lessonIndex, lessonCount } = Astro.props;
+const { title, description, module: moduleSlug, minutes } = entry.data;
+const mod = moduleBySlug(moduleSlug);
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="container prose lesson">
+    <nav class="crumbs">
+      <a href="/#curriculum">Curriculum</a>
+      <span aria-hidden="true">/</span>
+      {mod && <a href={`/modules/${mod.slug}`}>{mod.emoji} {mod.title}</a>}
+    </nav>
+
+    <div class="lesson-meta">
+      <span>Lesson {lessonIndex} of {lessonCount}</span>
+      <span aria-hidden="true">·</span>
+      <span>{minutes} min</span>
+    </div>
+
+    <h1 class="lesson-title">{title}</h1>
+    <p class="lesson-lede">{description}</p>
+
+    <hr />
+
+    <slot />
+
+    <nav class="lesson-nav">
+      {prev ? (
+        <a class="lesson-nav-link prev" href={`/lessons/${prev.slug}`}>
+          <span class="dir">← Previous</span>
+          <span class="ttl">{prev.title}</span>
+        </a>
+      ) : <span />}
+      {next ? (
+        <a class="lesson-nav-link next" href={`/lessons/${next.slug}`}>
+          <span class="dir">Next →</span>
+          <span class="ttl">{next.title}</span>
+        </a>
+      ) : (
+        <a class="lesson-nav-link next" href="/#curriculum">
+          <span class="dir">Done →</span>
+          <span class="ttl">Back to curriculum</span>
+        </a>
+      )}
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .lesson {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .crumbs {
+    display: flex;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .crumbs a {
+    color: var(--text-muted);
+  }
+  .crumbs a:hover {
+    color: var(--text);
+  }
+  .lesson-meta {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .lesson-title {
+    margin: 8px 0 0;
+    font-size: 2.4rem;
+  }
+  .lesson-lede {
+    margin-top: 12px;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+  }
+  .lesson-nav {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .lesson-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elevated);
+    transition: border-color 0.15s ease;
+  }
+  .lesson-nav-link:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+  .lesson-nav-link.next {
+    text-align: right;
+  }
+  .lesson-nav-link .dir {
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .lesson-nav-link .ttl {
+    color: var(--text);
+    font-weight: 600;
+  }
+  @media (max-width: 640px) {
+    .lesson-nav {
+      grid-template-columns: 1fr;
+    }
+    .lesson-title {
+      font-size: 1.9rem;
+    }
+  }
+</style>

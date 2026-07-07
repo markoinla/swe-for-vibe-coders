@@ -1,0 +1,51 @@
+---
+interface Props {
+  type?: 'info' | 'tip' | 'warning' | 'danger';
+  title?: string;
+}
+const { type = 'info', title } = Astro.props;
+const icons = { info: 'ℹ️', tip: '💡', warning: '⚠️', danger: '🛑' };
+const defaultTitles = { info: 'Note', tip: 'Tip', warning: 'Watch out', danger: 'Danger' };
+---
+<aside class={`callout ${type}`}>
+  <div class="callout-head">
+    <span class="callout-icon" aria-hidden="true">{icons[type]}</span>
+    <span class="callout-title">{title ?? defaultTitles[type]}</span>
+  </div>
+  <div class="callout-body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .callout {
+    margin: 28px 0;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    border-left-width: 4px;
+    background: var(--bg-elevated);
+  }
+  .callout-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .callout-body {
+    margin-top: 6px;
+    font-size: 0.98rem;
+    color: var(--text);
+  }
+  .callout-body :global(> :first-child) {
+    margin-top: 0;
+  }
+  .callout-body :global(> :last-child) {
+    margin-bottom: 0;
+  }
+  .callout.info { border-left-color: var(--accent); }
+  .callout.tip { border-left-color: var(--success); background: var(--success-soft); }
+  .callout.warning { border-left-color: var(--warning); background: var(--warning-soft); }
+  .callout.danger { border-left-color: var(--danger); background: var(--danger-soft); }
+</style>

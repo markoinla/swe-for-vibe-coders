@@ -1,0 +1,46 @@
+---
+// A "go do it for real" callout that sends the learner into an actual editor/repo.
+// This is the hands-on backbone of the course — reading about git is not the same
+// as running it.
+interface Props {
+  title?: string;
+}
+const { title = 'Try it for real' } = Astro.props;
+---
+<section class="tryit">
+  <div class="tryit-head">
+    <span class="tryit-icon" aria-hidden="true">🛠️</span>
+    <h3 class="tryit-title">{title}</h3>
+  </div>
+  <div class="tryit-body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .tryit {
+    margin: 36px 0;
+    padding: 22px 24px;
+    border-radius: var(--radius);
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+  .tryit-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tryit-icon { font-size: 1.3rem; }
+  .tryit-title {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--text);
+  }
+  .tryit-body {
+    margin-top: 10px;
+    font-size: 1rem;
+  }
+  .tryit-body :global(> :first-child) { margin-top: 0; }
+  .tryit-body :global(> :last-child) { margin-bottom: 0; }
+  .tryit-body :global(ol) { margin-top: 8px; }
+</style>

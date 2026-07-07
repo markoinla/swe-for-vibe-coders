@@ -1,0 +1,93 @@
+---
+title: Branches, without the fear
+description: How to try risky changes in a parallel universe — and merge them back only if they work.
+module: version-control
+order: 3
+minutes: 11
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+import Callout from '../../../components/Callout.astro';
+import Terminal from '../../../components/Terminal.astro';
+import TryItInRepo from '../../../components/TryItInRepo.astro';
+
+You now have save points. Branches are the next unlock: a way to work on something risky
+*without* touching the version that already works.
+
+## A parallel universe for your code
+
+A **branch** is a separate line of history. Picture your commits as a timeline. A branch
+splits off a parallel copy where you can make changes freely. The original timeline
+(usually called `main`) stays exactly as it was.
+
+If the experiment works out, you **merge** it back into `main`. If it doesn't, you throw the
+branch away and `main` never even knew it happened.
+
+<Callout type="tip" title="Why you'd want this">
+  Your live website runs off `main`. You want to try a big redesign. Do it on a branch — your
+  real site stays safe on `main` while you experiment. Merge only when the redesign is ready.
+</Callout>
+
+## The commands
+
+Create a branch and switch to it in one step:
+
+<Terminal cmd="git switch -c redesign-homepage" out={`Switched to a new branch 'redesign-homepage'`} />
+
+Now every commit you make lands on `redesign-homepage`, not `main`. Make your changes,
+commit them as usual. When you want to go back to the safe version:
+
+<Terminal cmd="git switch main" out={`Switched to branch 'main'`} />
+
+Your files instantly change back to how `main` looks. The redesign work isn't gone — it's
+safely on its branch, waiting. Switch back anytime with `git switch redesign-homepage`.
+
+<Quiz
+  question="You're on a branch called 'experiment' and you run git switch main. What happens to the work you did on 'experiment'?"
+  options={[
+    { text: "It's deleted permanently", explain: "No — switching branches never deletes commits. Your work is safe on 'experiment'." },
+    { text: "It's safely kept on the 'experiment' branch; you can switch back anytime", correct: true, explain: "Right. Branches are independent — switching just changes which one you're looking at." },
+    { text: "It automatically merges into main", explain: "Merging is a deliberate, separate step. Switching alone never merges anything." },
+  ]}
+  client:visible
+/>
+
+## Merging it back
+
+Happy with the branch? Bring it into `main`. First switch to the branch you want to merge
+*into* (`main`), then merge the other one in:
+
+<Terminal cmd="git switch main" out={`Switched to branch 'main'`} />
+
+<Terminal cmd="git merge redesign-homepage" out={`Updating a1b2c3d..f4e5d6c
+Fast-forward
+ index.html | 40 ++++++++++++++++++++++++++--------------`} />
+
+Now `main` contains the redesign. You can delete the branch — it's served its purpose.
+
+<Callout type="warning" title="You'll hear the word 'conflict'">
+  Sometimes two branches change the same line and git can't decide which to keep. That's a
+  **merge conflict**. It sounds scary but it's just git asking you to choose. We cover
+  handling them calmly in a later lesson — for now, know that it's normal and fixable.
+</Callout>
+
+<Quiz
+  question="Why is doing risky work on a branch better than doing it directly on main?"
+  options={[
+    { text: "Branches make your code run faster", explain: "Branches have nothing to do with performance — they're about organizing history." },
+    { text: "The working version on main stays untouched until you deliberately merge", correct: true, explain: "Exactly — main stays a known-good version while you experiment in isolation." },
+    { text: "You have to use branches or git won't let you commit", explain: "You can absolutely commit straight to main. Branches are a choice that keeps main safe." },
+  ]}
+  client:visible
+/>
+
+<TryItInRepo>
+  In a git project you've got lying around:
+
+  1. Run `git switch -c my-experiment` to branch off.
+  2. Change a file and commit it (`git add .` then `git commit -m "Try something"`).
+  3. Run `git switch main` — watch your change vanish from the files.
+  4. Run `git switch my-experiment` — watch it come back.
+
+  Feel that? That's the safety net. Nothing you do on a branch can hurt `main`.
+</TryItInRepo>

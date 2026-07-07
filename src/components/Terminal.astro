@@ -1,0 +1,58 @@
+---
+// A styled, non-interactive terminal transcript. Pass the command as `cmd` and the
+// (optional) output as `out`. Output is a plain string prop rather than a slot so that
+// characters like { } and < > in code/diffs are treated as text, not parsed as MDX/JSX.
+interface Props {
+  cmd: string;
+  out?: string;
+  title?: string;
+}
+const { cmd, out, title = 'terminal' } = Astro.props;
+---
+<div class="term">
+  <div class="term-bar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="term-title">{title}</span>
+  </div>
+  <pre class="term-body"><span class="prompt">$</span> <span class="cmd">{cmd}</span>{out ? '\n' + out : ''}</pre>
+</div>
+
+<style>
+  .term {
+    margin: 28px 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow);
+  }
+  .term-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 14px;
+    background: #2a2740;
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+  .term-title {
+    margin-left: 8px;
+    font-size: 0.78rem;
+    color: #b3aecb;
+    font-family: var(--font-mono);
+  }
+  .term-body {
+    margin: 0;
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 16px 18px;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+  .prompt { color: #8b85f5; user-select: none; margin-right: 8px; }
+  .cmd { color: #a5f3b0; }
+</style>

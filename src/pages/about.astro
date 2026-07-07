@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="About" description="Why SWE for Vibe Coders exists and who it's for.">
+  <section class="container prose about">
+    <h1>About this course</h1>
+    <p class="lede">
+      AI coding tools made it possible to build real, working software without ever
+      learning the craft underneath it. That’s genuinely great. But there’s a gap:
+      the tools happily write code for you and quietly assume you know what a commit
+      is, why tests exist, or that committing your API key is a bad day waiting to happen.
+    </p>
+    <p>
+      <strong>SWE for Vibe Coders</strong> fills that gap. It teaches the small set of
+      software-engineering fundamentals that stop you from losing work, breaking things
+      in production, or getting stuck the moment the AI’s suggestion doesn’t work. No
+      computer-science degree, no gatekeeping — just the practical stuff, taught the way
+      you actually learn: by doing.
+    </p>
+
+    <h2>How it works</h2>
+    <ul>
+      <li><strong>Short lessons.</strong> Each one covers a single idea in a few minutes.</li>
+      <li><strong>Check-yourself questions.</strong> Quick interactive prompts so you know an idea landed before you move on.</li>
+      <li><strong>Real practice.</strong> Modules end with a hands-on exercise in an actual repo — because reading about git isn’t the same as using it.</li>
+    </ul>
+
+    <h2>Who it’s for</h2>
+    <p>
+      Anyone who can already make things with AI and wants to level up the engineering
+      around it — indie hackers, designers-turned-builders, founders, and honestly the
+      author of this course too. If you’ve ever thought “I probably should understand
+      what this command does,” you’re in the right place.
+    </p>
+
+    <h2>Open source</h2>
+    <p>
+      The whole course is open source. Spot a mistake, or want to add a lesson?
+      <a href="https://github.com/markoinla/swe-for-vibe-coders" target="_blank" rel="noopener">Contributions are welcome on GitHub.</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .about { padding: 48px 0 40px; }
+  .about h1 { font-size: 2.4rem; }
+  .lede { font-size: 1.2rem; color: var(--text-muted); }
+</style>
